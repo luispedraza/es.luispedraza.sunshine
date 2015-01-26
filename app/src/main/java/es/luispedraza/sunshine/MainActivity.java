@@ -57,7 +57,6 @@ public class MainActivity extends ActionBarActivity {
     public static class PlaceholderFragment extends Fragment {
 
 
-
         public PlaceholderFragment() {
         }
 
@@ -66,32 +65,19 @@ public class MainActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            // fake forecast data
-            String[] forecastArray = {
-                    "Today - Sunny - 88/34",
-                    "Tomorrow - Foggy - 70/40",
-                    "Weds - Cloudy - 89-30",
-                    "Thurs - Sunny - 88/34",
-                    "Fri - Foggy - 70/40",
-                    "Sat - Foggy - 89-30",
-                    "Sun - Cloudy - 88/34",
-                    "Mon - Cloudy - 70/40",
-                    "Tue - Sunny - 89-30",
-                    "Wed - Sunny - 88/34",
-                    "Thurs - Sunny - 70/40",
-                    "Fri - Cloudy - 89-30"
-            };
-            ArrayList<String> weekForecast = new ArrayList<String>(Arrays.asList(forecastArray));
+            // Sample data
+            String[] sampleData = {"item #1", "item #2", "item #3", "item #4", "item #5", "#item #6"};
+            ArrayList<String> sampleArrayList = new ArrayList<String>(Arrays.asList(sampleData));
 
             // Create the data adapter: ArrayAdapter
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(//getActivity().getBaseContext(),
+                    getActivity(),
                     R.layout.list_item_forecast,
                     R.id.list_item_forecast_textview,
-                    weekForecast);
+                    sampleArrayList);
             // Now, bind the adapter to the View:
             ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
             listView.setAdapter(adapter);
-
 
             return rootView;
         }

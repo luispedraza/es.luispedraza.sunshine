@@ -29,6 +29,9 @@ import java.util.Arrays;
  */
 public class ForecastFragment extends Fragment {
 
+    ArrayAdapter<String> mForecastAdapter;
+
+
     public ForecastFragment() {
     }
 
@@ -49,23 +52,33 @@ public class ForecastFragment extends Fragment {
         ArrayList<String> sampleArrayList = new ArrayList<String>(Arrays.asList(sampleData));
 
         // Create the data adapter: ArrayAdapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(//getActivity().getBaseContext(),
+        mForecastAdapter = new ArrayAdapter<String>(//getActivity().getBaseContext(),
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
                 sampleArrayList);
         // Now, bind the adapter to the View:
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        listView.setAdapter(adapter);
+        listView.setAdapter(mForecastAdapter);
 
         return rootView;
     }
+
 
     /** Obtain new data from server */
     private void refreshData() {
         // Obtain new data:
         FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
         fetchWeatherTask.execute("28002");
+    }
+
+    void updateUI (String[] newData) {
+        if (newData != null) {
+            mForecastAdapter.clear();
+            for (String dayForecast : newData) {
+                mForecastAdapter.add(dayForecast);
+            }
+        }
     }
 
     @Override
@@ -90,9 +103,8 @@ public class ForecastFragment extends Fragment {
 
 
     // Async activity for downloading new data
-    public class FetchWeatherTask extends AsyncTask<String, Void, String> {
+    public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
-        String forecastJsonStr = null; // Will contain the raw JSON response as a string.
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
         String getWeatherForecast(String postalCode) {
@@ -167,21 +179,21 @@ public class ForecastFragment extends Fragment {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
 
             // If there is no zip code, nothing to be done:
             if (params.length == 0) {
                 return null;
             }
-            forecastJsonStr = getWeatherForecast(params[0]);
-            return forecastJsonStr;
+            String forecastJsonStr = getWeatherForecast(params[0]);
+            OpenWeatherMapParser parser = new OpenWeatherMapParser(forecastJsonStr);
+            return parser.getResult();
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            Log.v(LOG_TAG, s);
-            // Now pare data and display result:
-            OpenWeatherMapParser parser = new OpenWeatherMapParser(s);
+        protected void onPostExecute(String[] forecastArray) {
+            // Now, update the interface
+            updateUI(forecastArray);
         }
     }
 }

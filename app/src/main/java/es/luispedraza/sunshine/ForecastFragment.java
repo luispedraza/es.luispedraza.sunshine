@@ -180,6 +180,8 @@ public class ForecastFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.v(LOG_TAG, s);
+            // Now pare data and display result:
+            OpenWeatherMapParser parser = new OpenWeatherMapParser(s);
         }
     }
 }

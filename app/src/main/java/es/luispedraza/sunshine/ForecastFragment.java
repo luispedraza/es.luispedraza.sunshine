@@ -1,5 +1,6 @@
 package es.luispedraza.sunshine;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,10 +28,6 @@ import java.util.Arrays;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
-
-    // API URL for the OpenWeatherMap query. More info: http://openweathermap.org/API#forecast
-    final String API_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
-
 
     public ForecastFragment() {
     }
@@ -68,7 +65,7 @@ public class ForecastFragment extends Fragment {
     private void refreshData() {
         // Obtain new data:
         FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-        fetchWeatherTask.execute(API_URL);
+        fetchWeatherTask.execute("28002");
     }
 
     @Override
@@ -98,7 +95,16 @@ public class ForecastFragment extends Fragment {
         String forecastJsonStr = null; // Will contain the raw JSON response as a string.
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
-        String getWeatherForecast() {
+        String getWeatherForecast(String postalCode) {
+            // Som constants:
+            // API URL for the OpenWeatherMap query. More info: http://openweathermap.org/API#forecast
+            final String API_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
+            // final String API_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
+            final String API_LOCATION_PARAM = "q";  // values: postal code
+            final String API_FORMAT_PARAM = "mode"; // values: json, xml...
+            final String API_UNITS_PARAM = "units"; // values: imperial, metric
+            final String API_DAYS_PARAM = "cnt";    // number of days for forecast
+
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
@@ -106,7 +112,18 @@ public class ForecastFragment extends Fragment {
             String jsonStr = null;
 
             try {
-                URL url = new URL(API_URL);
+
+                Uri builtUri = Uri.parse(API_BASE_URL).buildUpon()
+                        .appendQueryParameter(API_LOCATION_PARAM, postalCode)
+                        .appendQueryParameter(API_FORMAT_PARAM, "json")
+                        .appendQueryParameter(API_UNITS_PARAM, "metric")
+                        .appendQueryParameter(API_DAYS_PARAM, "7")
+                        .build();
+
+                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
+
+                Log.v(LOG_TAG, "Built Uri " + builtUri.toString());
+
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -156,7 +173,7 @@ public class ForecastFragment extends Fragment {
             if (params.length == 0) {
                 return null;
             }
-            forecastJsonStr = getWeatherForecast();
+            forecastJsonStr = getWeatherForecast(params[0]);
             return forecastJsonStr;
         }
 

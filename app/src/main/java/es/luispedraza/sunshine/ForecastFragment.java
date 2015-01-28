@@ -11,8 +11,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -60,6 +62,15 @@ public class ForecastFragment extends Fragment {
         // Now, bind the adapter to the View:
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
+
+        // Click listeners
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String forecastText = ((TextView) view.findViewById(R.id.list_item_forecast_textview)).getText().toString();
+                Toast.makeText(getActivity(), forecastText, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         refreshData();
 

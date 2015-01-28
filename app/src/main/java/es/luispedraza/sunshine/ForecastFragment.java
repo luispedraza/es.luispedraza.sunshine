@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -67,7 +66,11 @@ public class ForecastFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String forecastText = ((TextView) view.findViewById(R.id.list_item_forecast_textview)).getText().toString();
+                // alternative 1:
+                // String forecastText = ((TextView) view.findViewById(R.id.list_item_forecast_textview)).getText().toString();
+                // alternative 2:
+                String forecastText = mForecastAdapter.getItem(position);
+                // Now, display information
                 Toast.makeText(getActivity(), forecastText, Toast.LENGTH_SHORT).show();
             }
         });

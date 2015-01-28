@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 
 public class DetailActivity extends ActionBarActivity {
@@ -63,9 +63,11 @@ public class DetailActivity extends ActionBarActivity {
 
             // Retrieve extra information from Intent
             Intent intent = getActivity().getIntent();
-            String forecastString = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Toast.makeText(getActivity(), forecastString, Toast.LENGTH_SHORT).show();
-
+            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                String forecastString = intent.getStringExtra(Intent.EXTRA_TEXT);
+                //Toast.makeText(getActivity(), forecastString, Toast.LENGTH_SHORT).show();
+                ((TextView) rootView.findViewById(R.id.detail_text)).setText(forecastString);
+            }
 
             return rootView;
         }

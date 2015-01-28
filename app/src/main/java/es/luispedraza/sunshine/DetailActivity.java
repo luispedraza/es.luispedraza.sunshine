@@ -1,5 +1,6 @@
 package es.luispedraza.sunshine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 public class DetailActivity extends ActionBarActivity {
@@ -58,6 +60,13 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+            // Retrieve extra information from Intent
+            Intent intent = getActivity().getIntent();
+            String forecastString = intent.getStringExtra(Intent.EXTRA_TEXT);
+            Toast.makeText(getActivity(), forecastString, Toast.LENGTH_SHORT).show();
+
+
             return rootView;
         }
     }

@@ -61,23 +61,29 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
 
+        refreshData();
+
         return rootView;
     }
 
 
-    /** Obtain new data from server */
+    /**
+     * Obtain new data from server
+     */
     private void refreshData() {
         // Obtain new data:
         FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
         fetchWeatherTask.execute("28002");
     }
 
-    void updateUI (String[] newData) {
+    void updateUI(String[] newData) {
         if (newData != null) {
             mForecastAdapter.clear();
             for (String dayForecast : newData) {
                 mForecastAdapter.add(dayForecast);
             }
+            // Alternative (more efficient in Honeycomb and above)
+            // mForecastAdapter.addAll(newData);
         }
     }
 

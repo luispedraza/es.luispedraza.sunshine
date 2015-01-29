@@ -3,7 +3,10 @@ package es.luispedraza.sunshine;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +16,8 @@ import android.widget.TextView;
 
 
 public class DetailActivity extends ActionBarActivity {
+
+    static private final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +35,33 @@ public class DetailActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        // Get provider and hold onto it to set the share intent
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        // Attach an intent to this ShareActionProvider.
+        if (shareActionProvider != null) {
+            shareActionProvider.setShareIntent(createShareForecastIntent());
+        } else {
+            Log.d(LOG_TAG, "Share Action Provider is null :( ");
+        }
         return true;
     }
+
+    /** Create a Intent for sharing current weather forecast
+     *
+     * @return Intent for sharing
+     */
+    Intent createShareForecastIntent() {
+        String  shareMessage = getIntent().getStringExtra(Intent.EXTRA_TEXT) + " #SunshineApp";
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+        return intent;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

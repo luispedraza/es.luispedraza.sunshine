@@ -26,7 +26,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -47,20 +46,27 @@ public class ForecastFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        // Refresh data every time this fragment is displayed
+        refreshData();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Sample data
-        String[] sampleData = {"item #1", "item #2", "item #3", "item #4", "item #5", "#item #6"};
-        ArrayList<String> sampleArrayList = new ArrayList<String>(Arrays.asList(sampleData));
+//        String[] sampleData = {"item #1", "item #2", "item #3", "item #4", "item #5", "#item #6"};
+//        ArrayList<String> sampleArrayList = new ArrayList<String>(Arrays.asList(sampleData));
 
         // Create the data adapter: ArrayAdapter
         mForecastAdapter = new ArrayAdapter<String>(//getActivity().getBaseContext(),
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                sampleArrayList);
+                new ArrayList<String>());
         // Now, bind the adapter to the View:
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
@@ -86,7 +92,7 @@ public class ForecastFragment extends Fragment {
             }
         });
 
-        refreshData();
+
 
         return rootView;
     }

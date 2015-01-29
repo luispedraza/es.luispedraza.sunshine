@@ -19,8 +19,11 @@ public class OpenWeatherMapParser {
     String LOG_TAG = OpenWeatherMapParser.class.getSimpleName();
     String[] result;
     JSONObject forecastJson;
+    private String units;
 
-    public OpenWeatherMapParser(String rawJson) {
+    public OpenWeatherMapParser(String rawJson, String units) {
+        // Units for temperature, etc.
+        this.units = units;
         try {
             forecastJson = new JSONObject(rawJson);
             getWeatherDataFromJson();
@@ -40,13 +43,22 @@ public class OpenWeatherMapParser {
         return format.format(date).toString();
     }
 
+    /** Convert temperature to correct units
+     *
+     * @param temperature
+     * @return
+     */
+    private long convertTemperature(double temperature) {
+        return Math.round(units.equals("metric") ? temperature : (temperature * (9/5) + 32));
+    }
+
     /**
      * Prepare the weather high/lows for presentation.
      */
     private String formatHighLows(double high, double low) {
         // For presentation, assume the user doesn't care about tenths of a degree.
-        long roundedHigh = Math.round(high);
-        long roundedLow = Math.round(low);
+        long roundedHigh = convertTemperature(high);
+        long roundedLow = convertTemperature(low);
 
         String highLowStr = roundedHigh + "/" + roundedLow;
         return highLowStr;

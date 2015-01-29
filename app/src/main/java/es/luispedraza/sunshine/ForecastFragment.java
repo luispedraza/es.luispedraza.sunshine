@@ -231,7 +231,15 @@ public class ForecastFragment extends Fragment {
                 return null;
             }
             String forecastJsonStr = getWeatherForecast(params[0]);
-            OpenWeatherMapParser parser = new OpenWeatherMapParser(forecastJsonStr);
+
+            // Get units from settings:
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String prefUnits = preferences.getString(
+                    getString(R.string.pref_units_key),
+                    getString(R.string.pref_units_default)
+            );
+            Log.d(LOG_TAG, "Selected units: " + prefUnits);
+            OpenWeatherMapParser parser = new OpenWeatherMapParser(forecastJsonStr, prefUnits);
             return parser.getResult();
         }
 

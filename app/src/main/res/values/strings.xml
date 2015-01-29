@@ -8,4 +8,7 @@
     <string name="pref_location_default" translatable="false">28002</string>
     <string name="pref_location_key" translatable="false" >PREF_LOCATION</string>
     <string name="pref_location_label">Location</string>
+    <string name="pref_units_default">metric</string>
+    <string name="pref_units_key">PREF_UNITS</string>
+    <string name="pref_units_label">Temperature Units</string>
 </resources>

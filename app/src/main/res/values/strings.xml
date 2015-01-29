@@ -5,4 +5,7 @@
     <string name="action_refresh_title">Refresh</string>
     <string name="refreshing_toast_message">Refreshing data...</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="pref_location_default" translatable="false">28002</string>
+    <string name="pref_location_key" translatable="false" >PREF_LOCATION</string>
+    <string name="pref_location_label">Location</string>
 </resources>

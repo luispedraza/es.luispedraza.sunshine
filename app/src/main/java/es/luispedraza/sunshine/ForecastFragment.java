@@ -1,9 +1,11 @@
 package es.luispedraza.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -94,9 +96,16 @@ public class ForecastFragment extends Fragment {
      * Obtain new data from server
      */
     private void refreshData() {
+        // Obtain location preference:
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String postalCode = preferences.getString(
+                getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default)
+        );
+
         // Obtain new data:
         FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-        fetchWeatherTask.execute("28002");
+        fetchWeatherTask.execute(postalCode);
     }
 
     void updateUI(String[] newData) {
@@ -139,7 +148,7 @@ public class ForecastFragment extends Fragment {
         String getWeatherForecast(String postalCode) {
             // Som constants:
             // API URL for the OpenWeatherMap query. More info: http://openweathermap.org/API#forecast
-            final String API_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
+            final String API_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily";
             // final String API_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7";
             final String API_LOCATION_PARAM = "q";  // values: postal code
             final String API_FORMAT_PARAM = "mode"; // values: json, xml...
@@ -161,7 +170,8 @@ public class ForecastFragment extends Fragment {
                         .appendQueryParameter(API_DAYS_PARAM, "7")
                         .build();
 
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
+                //URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
+                URL url = new URL(builtUri.toString());
 
                 Log.v(LOG_TAG, "Built Uri " + builtUri.toString());
 

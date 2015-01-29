@@ -4,13 +4,13 @@ import android.provider.BaseColumns;
 
 /**
  * Created by luis on 29/1/15.
- *
+ * <p/>
  * This class defines tables and column names for this App database
  */
 public class WeatherContract {
 
-    /** Table contents for the weather table
-     *
+    /**
+     * Table contents for the weather table
      */
     public static final class WeatherEntry implements BaseColumns {
         // The table name:
@@ -35,5 +35,21 @@ public class WeatherContract {
         public static final String COLUMN_WIND_SPEED = "wind_speed";
         // Wind direction stored as degrees (0 is north, 180 is south) as float
         public static final String COLUMN_WIND_DEG = "wind_deg";
+    }
+
+    /**
+     * Table contents for the location table
+     */
+    public static final class LocationEntry implements BaseColumns {
+        // The table name:
+        public static final String TABLE_NAME = "location";
+
+        // Location setting, sent to the openweathermap api:
+        public static final String COLUMN_LOCATION_SETTING = "location_setting";
+        // Human readable location name, provided by the api
+        public static final String COLUMN_CITY_NAME = "city_name";
+        // Latitude and Longitude, to pinpoint location in the Map Intent:
+        public static final String COLUMN_LAT = "latitude";
+        public static final String COLUMN_LON = "longitude";
     }
 }
